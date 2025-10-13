@@ -150,6 +150,7 @@ const defaultData = [
 let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
+let autoFlipTimer = null;
 
 // --- DOM References ---
 const board = document.getElementById("board");
@@ -157,6 +158,7 @@ const modal = document.getElementById("modal");
 const questionText = document.getElementById("question-text");
 const answerText = document.getElementById("answer-text");
 const questionEditor = document.getElementById("question-editor");
+const answerEditor = document.getElementById("answer-editor");
 const modalTitle = document.getElementById("modal-title");
 const saveBtn = document.getElementById("save-btn");
 const closeBtn = document.getElementById("close-btn");
@@ -198,49 +200,57 @@ function renderBoard() {
 
 // --- Modal Handling ---
 function openModal(catIndex, qIndex, cell) {
+  clearTimeout(autoFlipTimer);
+
   currentCategory = catIndex;
   currentIndex = qIndex;
   currentCell = cell;
 
-  const questionObj = gameData[catIndex].questions[qIndex];
-  modal.dataset.value = questionObj.value;
+  const qObj = gameData[catIndex].questions[qIndex];
+  modal.dataset.value = qObj.value;
   modal.style.display = "flex";
-  modalTitle.textContent = `${gameData[catIndex].category} - ${questionObj.value} pts`;
+  modalTitle.textContent = `${gameData[catIndex].category} - ${qObj.value} pts`;
 
-  questionText.textContent = questionObj.question;
-  answerText.textContent = questionObj.answer || "No answer provided.";
-  flipInner.classList.remove("flipped"); // Reset flip state
+  questionText.textContent = qObj.question;
+  answerText.textContent = qObj.answer || "No answer provided.";
+  flipInner.classList.remove("flipped");
 
   if (editMode) {
-    questionEditor.style.display = "block";
-    saveBtn.style.display = "inline-block";
     flipInner.style.display = "none";
-    questionEditor.value = questionObj.question;
+    questionEditor.style.display = "block";
+    answerEditor.style.display = "block";
+    saveBtn.style.display = "inline-block";
+    questionEditor.value = qObj.question;
+    answerEditor.value = qObj.answer || "";
   } else {
     flipInner.style.display = "block";
     questionEditor.style.display = "none";
+    answerEditor.style.display = "none";
     saveBtn.style.display = "none";
+
+    autoFlipTimer = setTimeout(() => flipInner.classList.add("flipped"), 3000);
   }
 }
 
 function saveQuestion() {
-  const newText = questionEditor.value.trim();
-  if (newText) {
-    gameData[currentCategory].questions[currentIndex].question = newText;
-    localStorage.setItem("jeopardyData", JSON.stringify(gameData));
-  }
+  const newQ = questionEditor.value.trim();
+  const newA = answerEditor.value.trim();
+  if (newQ) gameData[currentCategory].questions[currentIndex].question = newQ;
+  gameData[currentCategory].questions[currentIndex].answer =
+    newA || "No answer provided.";
+
+  localStorage.setItem("jeopardyData", JSON.stringify(gameData));
   closeModal();
 }
 
 function closeModal() {
   modal.style.display = "none";
+  clearTimeout(autoFlipTimer);
   if (currentCell) currentCell.classList.add("used");
 }
 
-// --- Reveal Answer (Flip Animation) ---
-revealBtn.onclick = () => {
-  flipInner.classList.toggle("flipped");
-};
+// --- Reveal ---
+revealBtn.onclick = () => flipInner.classList.toggle("flipped");
 
 // --- Scoring ---
 function updateScore(team, delta) {
@@ -251,7 +261,6 @@ function updateScore(team, delta) {
   setTimeout(() => (el.style.transform = "scale(1)"), 200);
 }
 
-// --- Scoring Buttons ---
 award1.onclick = () => {
   updateScore(1, Number(modal.dataset.value));
   closeModal();

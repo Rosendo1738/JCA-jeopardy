@@ -112,7 +112,7 @@ button:hover {
   padding: 10px;
 }
 
-/* Smaller Flip Card */
+/* Flip Card */
 .flip-card {
   background: transparent;
   width: 70%;
@@ -160,9 +160,22 @@ button:hover {
   transform: rotateY(180deg);
 }
 
-/* Modal layout improvements */
+/* Textarea */
+textarea {
+  width: 70%;
+  max-width: 600px;
+  height: 60px;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin: 5px;
+  display: none;
+}
+
+/* Buttons container */
 #modal-buttons {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 #modal-buttons button {
