@@ -1,4 +1,4 @@
-// --- Japanese Jeopardy Data (now includes answers) ---
+// --- Japanese Jeopardy Data (with answers) ---
 const defaultData = [
   {
     category: "Characters（文字）",
@@ -169,6 +169,7 @@ const award2 = document.getElementById("award2");
 const subtract1 = document.getElementById("subtract1");
 const subtract2 = document.getElementById("subtract2");
 const revealBtn = document.getElementById("reveal-btn");
+const flipInner = document.getElementById("flip-inner");
 
 let currentCategory = null;
 let currentIndex = null;
@@ -205,16 +206,18 @@ function openModal(catIndex, qIndex, cell) {
   modal.dataset.value = questionObj.value;
   modal.style.display = "flex";
   modalTitle.textContent = `${gameData[catIndex].category} - ${questionObj.value} pts`;
-  answerText.style.display = "none";
+
+  questionText.textContent = questionObj.question;
+  answerText.textContent = questionObj.answer || "No answer provided.";
+  flipInner.classList.remove("flipped"); // Reset flip state
 
   if (editMode) {
     questionEditor.style.display = "block";
     saveBtn.style.display = "inline-block";
-    questionText.style.display = "none";
+    flipInner.style.display = "none";
     questionEditor.value = questionObj.question;
   } else {
-    questionText.textContent = questionObj.question;
-    questionText.style.display = "block";
+    flipInner.style.display = "block";
     questionEditor.style.display = "none";
     saveBtn.style.display = "none";
   }
@@ -234,11 +237,9 @@ function closeModal() {
   if (currentCell) currentCell.classList.add("used");
 }
 
-// --- Reveal Answer ---
+// --- Reveal Answer (Flip Animation) ---
 revealBtn.onclick = () => {
-  const q = gameData[currentCategory].questions[currentIndex];
-  answerText.textContent = q.answer || "No answer provided.";
-  answerText.style.display = "block";
+  flipInner.classList.toggle("flipped");
 };
 
 // --- Scoring ---

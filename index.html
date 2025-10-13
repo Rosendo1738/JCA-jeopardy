@@ -33,11 +33,18 @@
     <!-- Modal -->
     <div id="modal">
       <p id="modal-title"></p>
-      <p id="question-text"></p>
-      <p
-        id="answer-text"
-        style="display: none; color: #ffcc00; font-size: 24px; margin-top: 10px"
-      ></p>
+
+      <div class="flip-card">
+        <div class="flip-inner" id="flip-inner">
+          <div class="flip-front">
+            <p id="question-text"></p>
+          </div>
+          <div class="flip-back">
+            <p id="answer-text"></p>
+          </div>
+        </div>
+      </div>
+
       <textarea
         id="question-editor"
         placeholder="Edit your question..."
