@@ -347,6 +347,20 @@ importFile.addEventListener("change", (e) => {
   reader.readAsText(file);
 });
 
+// --- Manual Score Adjust Buttons ---
+document
+  .getElementById("plus1")
+  .addEventListener("click", () => updateScore(1, 100));
+document
+  .getElementById("minus1")
+  .addEventListener("click", () => updateScore(1, -100));
+document
+  .getElementById("plus2")
+  .addEventListener("click", () => updateScore(2, 100));
+document
+  .getElementById("minus2")
+  .addEventListener("click", () => updateScore(2, -100));
+
 // --- Init ---
 closeBtn.onclick = closeModal;
 saveBtn.onclick = saveQuestion;

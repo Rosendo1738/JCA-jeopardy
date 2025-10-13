@@ -190,3 +190,29 @@ textarea {
   background: #001a33;
   padding: 10px;
 }
+
+/* Score controls layout */
+.score-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.adjust {
+  background: #ffcc00;
+  color: black;
+  font-weight: bold;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.adjust:hover {
+  background: #ffd633;
+  transform: scale(1.1);
+}
