@@ -102,11 +102,12 @@ let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
 let autoFlipTimer = null;
 let countdownTimer = null;
-let timeLeft = 30; // default seconds
+let timeLeft = 30;
 
 // --- Settings ---
 let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
-  revealDelay: 3,
+  revealDelay: 0, // 0 = no auto reveal
+  timerLength: 30, // adjustable countdown
 };
 
 // --- DOM References ---
@@ -146,7 +147,6 @@ function renderBoard() {
     header.className = "category";
 
     if (editMode) {
-      // Editable category name
       const input = document.createElement("input");
       input.type = "text";
       input.value = cat.category;
@@ -170,7 +170,6 @@ function renderBoard() {
     board.appendChild(header);
   });
 
-  // Render question cells
   for (let i = 0; i < 5; i++) {
     gameData.forEach((cat, catIndex) => {
       const cell = document.createElement("div");
@@ -198,7 +197,6 @@ function openModal(catIndex, qIndex, cell) {
   answerText.textContent = qObj.answer || "No answer provided.";
   flipInner.classList.remove("flipped");
 
-  // Start Timer
   startTimer();
 
   if (editMode) {
@@ -213,10 +211,6 @@ function openModal(catIndex, qIndex, cell) {
     questionEditor.style.display = "none";
     answerEditor.style.display = "none";
     saveBtn.style.display = "none";
-    autoFlipTimer = setTimeout(
-      () => flipInner.classList.add("flipped"),
-      settings.revealDelay * 1000
-    );
   }
 }
 
@@ -228,7 +222,6 @@ function saveQuestion() {
     newA || "No answer provided.";
   localStorage.setItem("jeopardyData", JSON.stringify(gameData));
 
-  // Reset used status after edit
   if (currentCell) currentCell.classList.remove("used");
   closeModal();
 }
@@ -278,22 +271,20 @@ modeToggle.onclick = () => {
   renderBoard();
 };
 
-// --- Reset (scores only) ---
+// --- Reset Scores ---
 resetBtn.onclick = () => {
-  if (
-    confirm("Reset scores and clear used questions? (Your edits stay saved)")
-  ) {
+  if (confirm("Reset scores and clear used questions? (Edits stay saved)")) {
     teamScores = { 1: 0, 2: 0 };
     score1.textContent = 0;
     score2.textContent = 0;
     document
       .querySelectorAll(".cell.used")
-      .forEach((cell) => cell.classList.remove("used"));
+      .forEach((c) => c.classList.remove("used"));
     modal.style.display = "none";
   }
 };
 
-// --- EXPORT QUESTIONS / ANSWERS ---
+// --- Export / Import ---
 exportBtn.addEventListener("click", () => {
   try {
     const blob = new Blob([JSON.stringify(gameData, null, 2)], {
@@ -312,7 +303,6 @@ exportBtn.addEventListener("click", () => {
   }
 });
 
-// --- IMPORT QUESTIONS / ANSWERS ---
 importBtn.addEventListener("click", () => importFile.click());
 importFile.addEventListener("change", (e) => {
   const file = e.target.files[0];
@@ -351,25 +341,39 @@ document
 const settingsModal = document.getElementById("settings-modal");
 const settingsBtn = document.getElementById("settings-btn");
 const revealInput = document.getElementById("reveal-speed");
+const timerInput = document.getElementById("timer-length");
 const saveSettingsBtn = document.getElementById("save-settings");
 const closeSettingsBtn = document.getElementById("close-settings");
 
 settingsBtn.addEventListener("click", () => {
   revealInput.value = settings.revealDelay;
+  timerInput.value = settings.timerLength;
   settingsModal.style.display = "flex";
 });
+
 closeSettingsBtn.addEventListener("click", () => {
   settingsModal.style.display = "none";
 });
+
 saveSettingsBtn.addEventListener("click", () => {
-  const newSpeed = parseFloat(revealInput.value);
-  if (!isNaN(newSpeed) && newSpeed >= 1 && newSpeed <= 10) {
-    settings.revealDelay = newSpeed;
+  const newReveal = parseFloat(revealInput.value);
+  const newTimer = parseInt(timerInput.value);
+
+  if (
+    !isNaN(newReveal) &&
+    newReveal >= 0 &&
+    newReveal <= 10 &&
+    !isNaN(newTimer) &&
+    newTimer >= 5 &&
+    newTimer <= 120
+  ) {
+    settings.revealDelay = newReveal;
+    settings.timerLength = newTimer;
     localStorage.setItem("jeopardySettings", JSON.stringify(settings));
-    alert(`✅ Reveal speed set to ${newSpeed}s`);
+    alert(`✅ Settings saved! Timer = ${newTimer}s`);
     settingsModal.style.display = "none";
   } else {
-    alert("⚠️ Please enter a number between 1 and 10.");
+    alert("⚠️ Enter valid values (Reveal 0–10s, Timer 5–120s).");
   }
 });
 
@@ -393,22 +397,19 @@ function startTimer() {
   clearInterval(countdownTimer);
   const timerDisplay = document.getElementById("timer-display");
 
-  timeLeft = 30; // reset to default or configurable later
+  timeLeft = settings.timerLength || 30;
   timerDisplay.textContent = timeLeft;
   timerDisplay.classList.remove("warning");
 
   countdownTimer = setInterval(() => {
     timeLeft--;
-    timerDisplay.textContent = timeLeft;
-
-    if (timeLeft <= 5) {
-      timerDisplay.classList.add("warning");
-    }
-
-    if (timeLeft <= 0) {
-      clearInterval(countdownTimer);
+    if (timeLeft > 0) {
+      timerDisplay.textContent = timeLeft;
+      if (timeLeft <= 5) timerDisplay.classList.add("warning");
+    } else {
       timerDisplay.textContent = "⏰ TIME!";
       timerDisplay.classList.add("warning");
+      stopTimer();
     }
   }, 1000);
 }
