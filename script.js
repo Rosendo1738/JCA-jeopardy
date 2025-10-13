@@ -288,13 +288,23 @@ modeToggle.onclick = () => {
 
 // --- Reset ---
 resetBtn.onclick = () => {
-  if (confirm("Reset all questions to default?")) {
-    localStorage.removeItem("jeopardyData");
-    gameData = JSON.parse(JSON.stringify(defaultData));
-    renderBoard();
+  if (
+    confirm(
+      "Reset scores and clear used questions? (Your edits will stay saved)"
+    )
+  ) {
+    // keep custom gameData intact
     teamScores = { 1: 0, 2: 0 };
     score1.textContent = 0;
     score2.textContent = 0;
+
+    // remove "used" visual tags
+    document.querySelectorAll(".cell.used").forEach((cell) => {
+      cell.classList.remove("used");
+    });
+
+    // close modal if open
+    modal.style.display = "none";
   }
 };
 
