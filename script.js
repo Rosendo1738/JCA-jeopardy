@@ -1,53 +1,69 @@
 // --- Default game data ---
 const defaultData = [
   {
-    category: "Science",
+    category: "Characters（文字）",
     questions: [
-      { value: 100, question: "What planet is known as the Red Planet?" },
-      { value: 200, question: "What gas do plants breathe in?" },
-      { value: 300, question: "What part of the cell contains DNA?" },
-      { value: 400, question: "What is H2O commonly known as?" },
-      { value: 500, question: "What force keeps us on the ground?" },
+      { value: 100, question: "What does the kanji 水 mean?" },
+      {
+        value: 200,
+        question:
+          "Which of the following is *not* a real katakana character? ア, ク, ツ, ぬ",
+      },
+      {
+        value: 300,
+        question: "Give the *onyomi* and *kunyomi* readings for 日.",
+      },
+      { value: 400, question: "Which kanji means 'study' or 'learning'?" },
+      { value: 500, question: "Write the kanji for 'to think' (as in 思う)." },
     ],
   },
   {
-    category: "History",
+    category: "Grammar（文法）",
     questions: [
-      { value: 100, question: "Who was the first President of the USA?" },
-      { value: 200, question: "In which year did WWII end?" },
-      { value: 300, question: "Which empire built the Colosseum?" },
-      { value: 400, question: "Who was known as the Maid of Orléans?" },
-      { value: 500, question: "Which wall fell in 1989?" },
+      { value: 100, question: "What particle means 'to' or 'toward' a place?" },
+      { value: 200, question: "What is the difference between は and が?" },
+      { value: 300, question: "Conjugate the verb 食べる into its て-form." },
+      { value: 400, question: "Translate and explain: 学生でもいいです." },
+      {
+        value: 500,
+        question: "What is the conditional form (〜たら) of 行く?",
+      },
     ],
   },
   {
-    category: "Geography",
+    category: "Vocabulary（語彙）",
     questions: [
-      { value: 100, question: "What is the largest ocean?" },
-      { value: 200, question: "Which continent is Egypt in?" },
-      { value: 300, question: "What is the capital of Japan?" },
-      { value: 400, question: "Which country has the Outback?" },
-      { value: 500, question: "Mount Everest lies in which mountain range?" },
+      { value: 100, question: "What does いぬ mean?" },
+      { value: 200, question: "Translate to Japanese: 'library'." },
+      {
+        value: 300,
+        question: "What is the opposite of 高い (expensive/tall)?",
+      },
+      { value: 400, question: "What’s the Japanese word for 'to borrow'?" },
+      {
+        value: 500,
+        question: "What is the difference between 思う and 考える?",
+      },
     ],
   },
   {
-    category: "Literature",
+    category: "Expressions（表現）",
     questions: [
-      { value: 100, question: "Who wrote 'Romeo and Juliet'?" },
-      { value: 200, question: "Who is the author of '1984'?" },
-      { value: 300, question: "What’s the first book of the Bible?" },
-      { value: 400, question: "Who wrote 'Moby Dick'?" },
-      { value: 500, question: "Who created Sherlock Holmes?" },
+      { value: 100, question: "How do you say 'Nice to meet you' politely?" },
+      { value: 200, question: "What does お疲れ様です mean in context?" },
+      { value: 300, question: "Translate: よろしくお願いします." },
+      { value: 400, question: "How do you apologize casually to a friend?" },
+      { value: 500, question: "What does the phrase 仕方がない express?" },
     ],
   },
   {
-    category: "Pop Culture",
+    category: "Culture（文化）",
     questions: [
-      { value: 100, question: "Who is Mickey Mouse’s dog?" },
-      { value: 200, question: "Which superhero is from Wakanda?" },
-      { value: 300, question: "Who sang 'Thriller'?" },
-      { value: 400, question: "What’s the name of Harry Potter’s owl?" },
-      { value: 500, question: "Who directed 'Inception'?" },
+      { value: 100, question: "What do people eat on お正月 (New Year’s)?" },
+      { value: 200, question: "Where is Mount Fuji located?" },
+      { value: 300, question: "What is the name of Japan’s bullet train?" },
+      { value: 400, question: "What holiday celebrates cherry blossoms?" },
+      { value: 500, question: "What is the difference between 神社 and お寺?" },
     ],
   },
 ];
