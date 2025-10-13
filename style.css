@@ -115,9 +115,9 @@ button:hover {
 /* Flip Card */
 .flip-card {
   background: transparent;
-  width: 70%;
-  max-width: 700px;
-  height: 160px;
+  width: 60%;
+  max-width: 600px;
+  height: 100px;
   perspective: 1000px;
   margin: 10px auto;
 }
