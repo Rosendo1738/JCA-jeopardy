@@ -44,6 +44,7 @@
         />
         <button id="import-btn">Import 📂</button>
         <button id="settings-btn">Settings ⚙️</button>
+        <button id="help-btn">Help 🆘</button>
       </div>
 
       <!-- Game Board -->
@@ -99,6 +100,82 @@
         <div class="settings-buttons">
           <button id="save-settings">Save</button>
           <button id="close-settings">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal">
+      <div class="help-content">
+        <h2>Help & Instructions 🆘</h2>
+
+        <p>
+          <strong>Default Reveal Speed:</strong> 3 seconds (can be changed in
+          <em>Settings ⚙️</em>)
+        </p>
+
+        <h3>🎮 Play Mode</h3>
+        <ul>
+          <li>
+            Click a question to reveal it — after your set delay, the answer
+            appears automatically.
+          </li>
+          <li>
+            Use <b>Reveal Answer 👀</b> to manually flip between question and
+            answer.
+          </li>
+          <li>
+            Click <b>+ Team</b> or <b>− Team</b> to award or subtract that
+            question’s points.
+          </li>
+          <li>
+            Questions gray out once used (but resettable with “Reset Board”).
+          </li>
+        </ul>
+
+        <h3>✏️ Edit Mode</h3>
+        <ul>
+          <li>
+            Click “Switch to Edit Mode ✏️” to edit any question or answer.
+          </li>
+          <li>
+            Changes are saved automatically to your browser (via localStorage).
+          </li>
+          <li>Editing a question resets its “used” status.</li>
+        </ul>
+
+        <h3>💾 Save & Export</h3>
+        <ul>
+          <li>
+            <b>Save / Export 💾</b> — Downloads all your custom questions &
+            answers as a <code>.json</code> file.
+          </li>
+          <li>
+            <b>Import 📂</b> — Load your saved file on any computer to restore
+            your game.
+          </li>
+          <li>
+            Files are fully portable between devices (works on GitHub Pages,
+            Chrome, etc.).
+          </li>
+        </ul>
+
+        <h3>⚙️ Settings</h3>
+        <ul>
+          <li>Adjust reveal delay time (1–10 seconds).</li>
+          <li>Settings are saved automatically for your browser.</li>
+        </ul>
+
+        <h3>➕ Manual Score Buttons</h3>
+        <ul>
+          <li>
+            Use the <b>+</b> and <b>−</b> beside each team’s score to manually
+            adjust in increments of 100 points.
+          </li>
+        </ul>
+
+        <div class="settings-buttons">
+          <button id="close-help">Close</button>
         </div>
       </div>
     </div>

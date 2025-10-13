@@ -154,7 +154,7 @@ let autoFlipTimer = null;
 
 // --- Settings ---
 let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
-  revealDelay: 3,
+  revealDelay: 10,
 };
 
 // --- DOM References ---
@@ -395,6 +395,19 @@ saveSettingsBtn.addEventListener("click", () => {
   } else {
     alert("⚠️ Please enter a number between 1 and 10.");
   }
+});
+
+// --- Help Modal Logic ---
+const helpModal = document.getElementById("help-modal");
+const helpBtn = document.getElementById("help-btn");
+const closeHelp = document.getElementById("close-help");
+
+helpBtn.addEventListener("click", () => {
+  helpModal.style.display = "flex";
+});
+
+closeHelp.addEventListener("click", () => {
+  helpModal.style.display = "none";
 });
 
 // --- Init ---

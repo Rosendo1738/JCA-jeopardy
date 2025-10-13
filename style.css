@@ -276,3 +276,71 @@ textarea {
 .settings-buttons button:hover {
   background: #ffd633;
 }
+
+/* Help Modal */
+#help-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+}
+
+.help-content {
+  background: #001f4d;
+  color: white;
+  border: 2px solid #ffcc00;
+  border-radius: 12px;
+  padding: 20px 30px;
+  width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.help-content h2 {
+  color: #ffcc00;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.help-content h3 {
+  color: #ffcc00;
+  margin-top: 15px;
+}
+
+.help-content ul {
+  margin: 8px 0 15px 20px;
+}
+
+.help-content li {
+  line-height: 1.5em;
+}
+
+.help-content code {
+  background: #002d6b;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #ffcc00;
+}
+
+#close-help {
+  display: block;
+  margin: 10px auto 0 auto;
+  background: #ffcc00;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#close-help:hover {
+  background: #ffd633;
+}
