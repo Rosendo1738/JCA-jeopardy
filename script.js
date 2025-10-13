@@ -1,4 +1,4 @@
-// --- Default Japanese Jeopardy Data ---
+// --- Japanese Jeopardy Data ---
 const defaultData = [
   {
     category: "Characters（文字）",
@@ -92,6 +92,7 @@ const subtract2 = document.getElementById("subtract2");
 
 let currentCategory = null;
 let currentIndex = null;
+let currentCell = null;
 
 // --- Board Rendering ---
 function renderBoard() {
@@ -118,8 +119,10 @@ function renderBoard() {
 function openModal(catIndex, qIndex, cell) {
   currentCategory = catIndex;
   currentIndex = qIndex;
-  modal.dataset.cellValue = cell.textContent; // store value for scoring
+  currentCell = cell;
+
   const questionObj = gameData[catIndex].questions[qIndex];
+  modal.dataset.value = questionObj.value;
   modal.style.display = "flex";
   modalTitle.textContent = `${gameData[catIndex].category} - ${questionObj.value} pts`;
 
@@ -147,32 +150,39 @@ function saveQuestion() {
 
 function closeModal() {
   modal.style.display = "none";
+  if (currentCell) currentCell.classList.add("used");
 }
 
 // --- Scoring ---
 function updateScore(team, delta) {
   teamScores[team] += delta;
-  document.getElementById(`score${team}`).textContent = teamScores[team];
+  const el = document.getElementById(`score${team}`);
+  el.textContent = teamScores[team];
+  el.style.transform = "scale(1.3)";
+  setTimeout(() => (el.style.transform = "scale(1)"), 200);
 }
 
-// Buttons for awarding/subtracting
+// --- Scoring Buttons ---
 award1.onclick = () => {
-  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  const value = Number(modal.dataset.value);
   updateScore(1, value);
   closeModal();
 };
+
 award2.onclick = () => {
-  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  const value = Number(modal.dataset.value);
   updateScore(2, value);
   closeModal();
 };
+
 subtract1.onclick = () => {
-  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  const value = Number(modal.dataset.value);
   updateScore(1, -value);
   closeModal();
 };
+
 subtract2.onclick = () => {
-  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  const value = Number(modal.dataset.value);
   updateScore(2, -value);
   closeModal();
 };

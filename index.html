@@ -3,31 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Japanese Jeopardy</title>
+    <title>Japanese Jeopardy JP</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Japanese Jeopardy 🇯🇵</h1>
+    <div class="container">
+      <h1>Japanese Jeopardy 🇯🇵</h1>
 
-    <!-- Scoreboard -->
-    <div id="scoreboard">
-      <div class="team" id="team1">
-        <h2>Team 1</h2>
-        <p class="score" id="score1">0</p>
+      <!-- Scoreboard -->
+      <div id="scoreboard">
+        <div class="team" id="team1">
+          <h2>Team 1</h2>
+          <p class="score" id="score1">0</p>
+        </div>
+        <div class="team" id="team2">
+          <h2>Team 2</h2>
+          <p class="score" id="score2">0</p>
+        </div>
       </div>
-      <div class="team" id="team2">
-        <h2>Team 2</h2>
-        <p class="score" id="score2">0</p>
+
+      <div id="top-bar">
+        <button id="mode-toggle">Switch to Edit Mode ✏️</button>
+        <button id="reset-btn">Reset Board</button>
       </div>
+
+      <div id="board"></div>
     </div>
 
-    <div id="top-bar">
-      <button id="mode-toggle">Switch to Edit Mode ✏️</button>
-      <button id="reset-btn">Reset Board</button>
-    </div>
-
-    <div id="board"></div>
-
+    <!-- Modal -->
     <div id="modal">
       <p id="modal-title"></p>
       <p id="question-text"></p>
@@ -35,12 +38,14 @@
         id="question-editor"
         placeholder="Edit your question..."
       ></textarea>
+
       <div id="modal-buttons">
         <button id="award1">+ Team 1</button>
         <button id="award2">+ Team 2</button>
         <button id="subtract1">− Team 1</button>
         <button id="subtract2">− Team 2</button>
       </div>
+
       <div>
         <button id="save-btn">Save</button>
         <button id="close-btn">Close</button>
