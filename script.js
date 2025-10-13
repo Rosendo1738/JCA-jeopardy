@@ -235,18 +235,32 @@ function openModal(catIndex, qIndex, cell) {
 function saveQuestion() {
   const newQ = questionEditor.value.trim();
   const newA = answerEditor.value.trim();
-  if (newQ) gameData[currentCategory].questions[currentIndex].question = newQ;
+
+  if (newQ) {
+    gameData[currentCategory].questions[currentIndex].question = newQ;
+  }
   gameData[currentCategory].questions[currentIndex].answer =
     newA || "No answer provided.";
 
+  // 💾 Save edits persistently
   localStorage.setItem("jeopardyData", JSON.stringify(gameData));
+
+  // ♻️ Reset the used state for this card (so it can be replayed)
+  if (currentCell) {
+    currentCell.classList.remove("used");
+  }
+
   closeModal();
 }
 
 function closeModal() {
   modal.style.display = "none";
   clearTimeout(autoFlipTimer);
-  if (currentCell) currentCell.classList.add("used");
+
+  // ❌ Don’t mark used if we’re in edit mode
+  if (!editMode && currentCell) {
+    currentCell.classList.add("used");
+  }
 }
 
 // --- Reveal ---
