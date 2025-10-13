@@ -1,147 +1,97 @@
-// --- Default Jeopardy Data ---
+// --- Game Defaults ---
 const defaultData = [
   {
-    category: "Characters（文字）",
+    category: "Characters",
     questions: [
-      { value: 100, question: "What does the kanji 水 mean?", answer: "Water" },
-      {
-        value: 200,
-        question:
-          "Which of the following is *not* a real katakana character? ア, ク, ツ, ぬ",
-        answer: "ぬ",
-      },
-      {
-        value: 300,
-        question: "Give the *onyomi* and *kunyomi* readings for 日.",
-        answer: "Onyomi: ニチ・ジツ / Kunyomi: ひ・か",
-      },
-      {
-        value: 400,
-        question: "Which kanji means 'study' or 'learning'?",
-        answer: "学 (がく / まなぶ)",
-      },
+      { value: 100, question: "What is ひらがな?", answer: "Hiragana" },
+      { value: 200, question: "What is カタカナ?", answer: "Katakana" },
+      { value: 300, question: "What is 漢字?", answer: "Kanji" },
+      { value: 400, question: "How many kana exist?", answer: "46 each" },
       {
         value: 500,
-        question: "Write the kanji for 'to think' (as in 思う).",
-        answer: "思",
+        question: "What’s the kanji for 'mountain'?",
+        answer: "山 (yama)",
       },
     ],
   },
   {
-    category: "Grammar（文法）",
+    category: "Grammar",
     questions: [
       {
         value: 100,
-        question: "What particle means 'to' or 'toward' a place?",
-        answer: "へ (e)",
+        question: "What does です mean?",
+        answer: "To be (polite copula)",
       },
       {
         value: 200,
-        question: "What is the difference between は and が?",
-        answer: "は = topic marker; が = subject marker",
+        question: "When do you use は vs が?",
+        answer: "Topic vs subject",
       },
       {
         value: 300,
-        question: "Conjugate the verb 食べる into its て-form.",
-        answer: "食べて",
+        question: "What’s the function of の?",
+        answer: "Possession / nominalizer",
       },
       {
         value: 400,
-        question: "Translate and explain: 学生でもいいです.",
-        answer: "It's okay even if (you are) a student.",
+        question: "What’s the て-form used for?",
+        answer: "Connecting verbs or requests",
       },
       {
         value: 500,
-        question: "What is the conditional form (〜たら) of 行く?",
-        answer: "行ったら",
+        question: "What’s the plain form of 食べます?",
+        answer: "食べる (taberu)",
       },
     ],
   },
   {
-    category: "Vocabulary（語彙）",
+    category: "Vocabulary",
     questions: [
-      { value: 100, question: "What does いぬ mean?", answer: "Dog" },
-      {
-        value: 200,
-        question: "Translate to Japanese: 'library'.",
-        answer: "としょかん（図書館）",
-      },
-      {
-        value: 300,
-        question: "What is the opposite of 高い (expensive/tall)?",
-        answer: "安い (cheap/short)",
-      },
-      {
-        value: 400,
-        question: "What’s the Japanese word for 'to borrow'?",
-        answer: "かりる (借りる)",
-      },
-      {
-        value: 500,
-        question: "What is the difference between 思う and 考える?",
-        answer:
-          "思う = to think (feel, believe); 考える = to think (analyze, reason)",
-      },
+      { value: 100, question: "What does 水 mean?", answer: "Water" },
+      { value: 200, question: "What does 山 mean?", answer: "Mountain" },
+      { value: 300, question: "What does 学校 mean?", answer: "School" },
+      { value: 400, question: "What does 先生 mean?", answer: "Teacher" },
+      { value: 500, question: "What does 大学 mean?", answer: "University" },
     ],
   },
   {
-    category: "Expressions（表現）",
+    category: "Particles",
     questions: [
       {
         value: 100,
-        question: "How do you say 'Nice to meet you' politely?",
-        answer: "はじめまして / よろしくお願いします",
+        question: "What does で indicate?",
+        answer: "Location of action",
       },
       {
         value: 200,
-        question: "What does お疲れ様です mean in context?",
-        answer: "Thank you for your hard work.",
+        question: "What does に indicate?",
+        answer: "Direction or time",
       },
       {
         value: 300,
-        question: "Translate: よろしくお願いします.",
-        answer: "Please take care of me / Nice to meet you.",
+        question: "What does を indicate?",
+        answer: "Direct object",
       },
-      {
-        value: 400,
-        question: "How do you apologize casually to a friend?",
-        answer: "ごめん / ごめんなさい",
-      },
+      { value: 400, question: "What does と indicate?", answer: "With / and" },
       {
         value: 500,
-        question: "What does the phrase 仕方がない express?",
-        answer: "It can’t be helped.",
+        question: "What does から mean?",
+        answer: "From / because",
       },
     ],
   },
   {
-    category: "Culture（文化）",
+    category: "Culture",
     questions: [
-      {
-        value: 100,
-        question: "What do people eat on お正月 (New Year’s)?",
-        answer: "おせち料理 (traditional New Year dishes)",
-      },
+      { value: 100, question: "What is おにぎり?", answer: "Rice ball" },
       {
         value: 200,
-        question: "Where is Mount Fuji located?",
-        answer: "Between Shizuoka and Yamanashi Prefectures",
+        question: "What is the capital of Japan?",
+        answer: "Tokyo",
       },
-      {
-        value: 300,
-        question: "What is the name of Japan’s bullet train?",
-        answer: "新幹線 (Shinkansen)",
-      },
-      {
-        value: 400,
-        question: "What holiday celebrates cherry blossoms?",
-        answer: "花見 (Hanami)",
-      },
-      {
-        value: 500,
-        question: "What is the difference between 神社 and お寺?",
-        answer: "神社 = Shinto shrine; お寺 = Buddhist temple",
-      },
+      { value: 300, question: "What is おはよう?", answer: "Good morning" },
+      { value: 400, question: "What is ありがとう?", answer: "Thank you" },
+      { value: 500, question: "What is さようなら?", answer: "Goodbye" },
     ],
   },
 ];
@@ -151,10 +101,12 @@ let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
 let autoFlipTimer = null;
+let countdownTimer = null;
 let timeLeft = 30; // default seconds
+
 // --- Settings ---
 let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
-  revealDelay: 30,
+  revealDelay: 3,
 };
 
 // --- DOM References ---
@@ -194,32 +146,24 @@ function renderBoard() {
     header.className = "category";
 
     if (editMode) {
-      // Create an editable text field for category names
+      // Editable category name
       const input = document.createElement("input");
       input.type = "text";
       input.value = cat.category;
       input.className = "category-input";
 
-      // Save category name on change or blur
-      input.addEventListener("change", () => {
+      const saveCategory = () => {
         const newName = input.value.trim();
         if (newName) {
           gameData[catIndex].category = newName;
           localStorage.setItem("jeopardyData", JSON.stringify(gameData));
         }
-      });
+      };
 
-      input.addEventListener("blur", () => {
-        const newName = input.value.trim();
-        if (newName) {
-          gameData[catIndex].category = newName;
-          localStorage.setItem("jeopardyData", JSON.stringify(gameData));
-        }
-      });
-
+      input.addEventListener("change", saveCategory);
+      input.addEventListener("blur", saveCategory);
       header.appendChild(input);
     } else {
-      // Static display in play mode
       header.textContent = cat.category;
     }
 
@@ -253,7 +197,8 @@ function openModal(catIndex, qIndex, cell) {
   questionText.textContent = qObj.question;
   answerText.textContent = qObj.answer || "No answer provided.";
   flipInner.classList.remove("flipped");
-  // --- Start Timer when modal opens ---
+
+  // Start Timer
   startTimer();
 
   if (editMode) {
@@ -289,7 +234,8 @@ function saveQuestion() {
 }
 
 function closeModal() {
-  stopTimer(); // stop countdown when closing
+  stopTimer();
+  document.getElementById("timer-display").textContent = "";
   modal.style.display = "none";
   clearTimeout(autoFlipTimer);
   if (!editMode && currentCell) currentCell.classList.add("used");
@@ -329,7 +275,7 @@ modeToggle.onclick = () => {
   modeToggle.textContent = editMode
     ? "Switch to Play Mode 🎮"
     : "Switch to Edit Mode ✏️";
-  renderBoard(); // refresh click handlers
+  renderBoard();
 };
 
 // --- Reset (scores only) ---
@@ -368,11 +314,9 @@ exportBtn.addEventListener("click", () => {
 
 // --- IMPORT QUESTIONS / ANSWERS ---
 importBtn.addEventListener("click", () => importFile.click());
-
 importFile.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = (evt) => {
     try {
@@ -414,20 +358,18 @@ settingsBtn.addEventListener("click", () => {
   revealInput.value = settings.revealDelay;
   settingsModal.style.display = "flex";
 });
-
 closeSettingsBtn.addEventListener("click", () => {
   settingsModal.style.display = "none";
 });
-
 saveSettingsBtn.addEventListener("click", () => {
   const newSpeed = parseFloat(revealInput.value);
-  if (!isNaN(newSpeed) && newSpeed >= 1 && newSpeed <= 100) {
+  if (!isNaN(newSpeed) && newSpeed >= 1 && newSpeed <= 10) {
     settings.revealDelay = newSpeed;
     localStorage.setItem("jeopardySettings", JSON.stringify(settings));
     alert(`✅ Reveal speed set to ${newSpeed}s`);
     settingsModal.style.display = "none";
   } else {
-    alert("⚠️ Please enter a number between 1 and 100.");
+    alert("⚠️ Please enter a number between 1 and 10.");
   }
 });
 
@@ -441,7 +383,6 @@ helpBtn.addEventListener("click", () => {
   helpCard.style.display = "flex";
   setTimeout(() => helpBox.classList.add("show"), 50);
 });
-
 closeHelp.addEventListener("click", () => {
   helpBox.classList.remove("show");
   setTimeout(() => (helpCard.style.display = "none"), 200);
@@ -474,6 +415,7 @@ function startTimer() {
 
 function stopTimer() {
   clearInterval(countdownTimer);
+  countdownTimer = null;
 }
 
 // --- Init ---
