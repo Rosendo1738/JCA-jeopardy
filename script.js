@@ -1,69 +1,147 @@
-// --- Japanese Jeopardy Data ---
+// --- Japanese Jeopardy Data (now includes answers) ---
 const defaultData = [
   {
     category: "Characters（文字）",
     questions: [
-      { value: 100, question: "What does the kanji 水 mean?" },
+      { value: 100, question: "What does the kanji 水 mean?", answer: "Water" },
       {
         value: 200,
         question:
           "Which of the following is *not* a real katakana character? ア, ク, ツ, ぬ",
+        answer: "ぬ",
       },
       {
         value: 300,
         question: "Give the *onyomi* and *kunyomi* readings for 日.",
+        answer: "Onyomi: ニチ・ジツ / Kunyomi: ひ・か",
       },
-      { value: 400, question: "Which kanji means 'study' or 'learning'?" },
-      { value: 500, question: "Write the kanji for 'to think' (as in 思う)." },
+      {
+        value: 400,
+        question: "Which kanji means 'study' or 'learning'?",
+        answer: "学 (がく / まなぶ)",
+      },
+      {
+        value: 500,
+        question: "Write the kanji for 'to think' (as in 思う).",
+        answer: "思",
+      },
     ],
   },
   {
     category: "Grammar（文法）",
     questions: [
-      { value: 100, question: "What particle means 'to' or 'toward' a place?" },
-      { value: 200, question: "What is the difference between は and が?" },
-      { value: 300, question: "Conjugate the verb 食べる into its て-form." },
-      { value: 400, question: "Translate and explain: 学生でもいいです." },
+      {
+        value: 100,
+        question: "What particle means 'to' or 'toward' a place?",
+        answer: "へ (e)",
+      },
+      {
+        value: 200,
+        question: "What is the difference between は and が?",
+        answer: "は = topic marker; が = subject marker",
+      },
+      {
+        value: 300,
+        question: "Conjugate the verb 食べる into its て-form.",
+        answer: "食べて",
+      },
+      {
+        value: 400,
+        question: "Translate and explain: 学生でもいいです.",
+        answer: "It's okay even if (you are) a student.",
+      },
       {
         value: 500,
         question: "What is the conditional form (〜たら) of 行く?",
+        answer: "行ったら",
       },
     ],
   },
   {
     category: "Vocabulary（語彙）",
     questions: [
-      { value: 100, question: "What does いぬ mean?" },
-      { value: 200, question: "Translate to Japanese: 'library'." },
+      { value: 100, question: "What does いぬ mean?", answer: "Dog" },
+      {
+        value: 200,
+        question: "Translate to Japanese: 'library'.",
+        answer: "としょかん（図書館）",
+      },
       {
         value: 300,
         question: "What is the opposite of 高い (expensive/tall)?",
+        answer: "安い (cheap/short)",
       },
-      { value: 400, question: "What’s the Japanese word for 'to borrow'?" },
+      {
+        value: 400,
+        question: "What’s the Japanese word for 'to borrow'?",
+        answer: "かりる (借りる)",
+      },
       {
         value: 500,
         question: "What is the difference between 思う and 考える?",
+        answer:
+          "思う = to think (feel, believe); 考える = to think (analyze, reason)",
       },
     ],
   },
   {
     category: "Expressions（表現）",
     questions: [
-      { value: 100, question: "How do you say 'Nice to meet you' politely?" },
-      { value: 200, question: "What does お疲れ様です mean in context?" },
-      { value: 300, question: "Translate: よろしくお願いします." },
-      { value: 400, question: "How do you apologize casually to a friend?" },
-      { value: 500, question: "What does the phrase 仕方がない express?" },
+      {
+        value: 100,
+        question: "How do you say 'Nice to meet you' politely?",
+        answer: "はじめまして / よろしくお願いします",
+      },
+      {
+        value: 200,
+        question: "What does お疲れ様です mean in context?",
+        answer: "Thank you for your hard work.",
+      },
+      {
+        value: 300,
+        question: "Translate: よろしくお願いします.",
+        answer: "Please take care of me / Nice to meet you.",
+      },
+      {
+        value: 400,
+        question: "How do you apologize casually to a friend?",
+        answer: "ごめん / ごめんなさい",
+      },
+      {
+        value: 500,
+        question: "What does the phrase 仕方がない express?",
+        answer: "It can’t be helped.",
+      },
     ],
   },
   {
     category: "Culture（文化）",
     questions: [
-      { value: 100, question: "What do people eat on お正月 (New Year’s)?" },
-      { value: 200, question: "Where is Mount Fuji located?" },
-      { value: 300, question: "What is the name of Japan’s bullet train?" },
-      { value: 400, question: "What holiday celebrates cherry blossoms?" },
-      { value: 500, question: "What is the difference between 神社 and お寺?" },
+      {
+        value: 100,
+        question: "What do people eat on お正月 (New Year’s)?",
+        answer: "おせち料理 (traditional New Year dishes)",
+      },
+      {
+        value: 200,
+        question: "Where is Mount Fuji located?",
+        answer: "Between Shizuoka and Yamanashi Prefectures",
+      },
+      {
+        value: 300,
+        question: "What is the name of Japan’s bullet train?",
+        answer: "新幹線 (Shinkansen)",
+      },
+      {
+        value: 400,
+        question: "What holiday celebrates cherry blossoms?",
+        answer: "花見 (Hanami)",
+      },
+      {
+        value: 500,
+        question: "What is the difference between 神社 and お寺?",
+        answer: "神社 = Shinto shrine; お寺 = Buddhist temple",
+      },
     ],
   },
 ];
@@ -77,6 +155,7 @@ let teamScores = { 1: 0, 2: 0 };
 const board = document.getElementById("board");
 const modal = document.getElementById("modal");
 const questionText = document.getElementById("question-text");
+const answerText = document.getElementById("answer-text");
 const questionEditor = document.getElementById("question-editor");
 const modalTitle = document.getElementById("modal-title");
 const saveBtn = document.getElementById("save-btn");
@@ -89,12 +168,13 @@ const award1 = document.getElementById("award1");
 const award2 = document.getElementById("award2");
 const subtract1 = document.getElementById("subtract1");
 const subtract2 = document.getElementById("subtract2");
+const revealBtn = document.getElementById("reveal-btn");
 
 let currentCategory = null;
 let currentIndex = null;
 let currentCell = null;
 
-// --- Board Rendering ---
+// --- Render Board ---
 function renderBoard() {
   board.innerHTML = "";
   gameData.forEach((cat) => {
@@ -125,6 +205,7 @@ function openModal(catIndex, qIndex, cell) {
   modal.dataset.value = questionObj.value;
   modal.style.display = "flex";
   modalTitle.textContent = `${gameData[catIndex].category} - ${questionObj.value} pts`;
+  answerText.style.display = "none";
 
   if (editMode) {
     questionEditor.style.display = "block";
@@ -153,6 +234,13 @@ function closeModal() {
   if (currentCell) currentCell.classList.add("used");
 }
 
+// --- Reveal Answer ---
+revealBtn.onclick = () => {
+  const q = gameData[currentCategory].questions[currentIndex];
+  answerText.textContent = q.answer || "No answer provided.";
+  answerText.style.display = "block";
+};
+
 // --- Scoring ---
 function updateScore(team, delta) {
   teamScores[team] += delta;
@@ -164,26 +252,19 @@ function updateScore(team, delta) {
 
 // --- Scoring Buttons ---
 award1.onclick = () => {
-  const value = Number(modal.dataset.value);
-  updateScore(1, value);
+  updateScore(1, Number(modal.dataset.value));
   closeModal();
 };
-
 award2.onclick = () => {
-  const value = Number(modal.dataset.value);
-  updateScore(2, value);
+  updateScore(2, Number(modal.dataset.value));
   closeModal();
 };
-
 subtract1.onclick = () => {
-  const value = Number(modal.dataset.value);
-  updateScore(1, -value);
+  updateScore(1, -Number(modal.dataset.value));
   closeModal();
 };
-
 subtract2.onclick = () => {
-  const value = Number(modal.dataset.value);
-  updateScore(2, -value);
+  updateScore(2, -Number(modal.dataset.value));
   closeModal();
 };
 
