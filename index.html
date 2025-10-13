@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeopardy Game</title>
+    <style>
+      body {
+        font-family: "Trebuchet MS", sans-serif;
+        background: radial-gradient(#003366, #000);
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        padding: 20px;
+        background: #001f4d;
+        margin: 0;
+        color: #ffcc00;
+        text-shadow: 2px 2px #000;
+      }
+
+      #board {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 5px;
+        margin: 20px;
+      }
+
+      .category {
+        background: #004080;
+        padding: 10px;
+        font-weight: bold;
+        border: 2px solid #001f4d;
+      }
+
+      .cell {
+        background: #002966;
+        border: 2px solid #001f4d;
+        height: 100px;
+        font-size: 24px;
+        color: #ffcc00;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .cell.used {
+        background: #000;
+        color: gray;
+        cursor: default;
+      }
+
+      #question-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        z-index: 10;
+      }
+
+      #question-modal p {
+        max-width: 80%;
+        font-size: 28px;
+        margin: 20px;
+      }
+
+      button {
+        background: #ffcc00;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Jeopardy!</h1>
+
+    <div id="board"></div>
+
+    <div id="question-modal">
+      <p id="question-text"></p>
+      <button id="close-btn">Close</button>
+    </div>
+
+    <script>
+      // Example categories and questions
+      const data = [
+        {
+          category: "Science",
+          questions: [
+            { value: 100, question: "What planet is known as the Red Planet?" },
+            { value: 200, question: "What gas do plants breathe in?" },
+            { value: 300, question: "What part of the cell contains DNA?" },
+            { value: 400, question: "What is H2O commonly known as?" },
+            { value: 500, question: "What force keeps us on the ground?" },
+          ],
+        },
+        {
+          category: "History",
+          questions: [
+            { value: 100, question: "Who was the first President of the USA?" },
+            { value: 200, question: "In which year did WWII end?" },
+            { value: 300, question: "Which empire built the Colosseum?" },
+            { value: 400, question: "Who was known as the Maid of Orléans?" },
+            { value: 500, question: "Which wall fell in 1989?" },
+          ],
+        },
+        {
+          category: "Geography",
+          questions: [
+            { value: 100, question: "What is the largest ocean?" },
+            { value: 200, question: "Which continent is Egypt in?" },
+            { value: 300, question: "What is the capital of Japan?" },
+            { value: 400, question: "Which country has the Outback?" },
+            {
+              value: 500,
+              question: "Mount Everest lies in which mountain range?",
+            },
+          ],
+        },
+        {
+          category: "Literature",
+          questions: [
+            { value: 100, question: "Who wrote 'Romeo and Juliet'?" },
+            { value: 200, question: "Who is the author of '1984'?" },
+            { value: 300, question: "What’s the first book of the Bible?" },
+            { value: 400, question: "Who wrote 'Moby Dick'?" },
+            { value: 500, question: "Who created Sherlock Holmes?" },
+          ],
+        },
+        {
+          category: "Pop Culture",
+          questions: [
+            { value: 100, question: "Who is Mickey Mouse’s dog?" },
+            { value: 200, question: "Which superhero is from Wakanda?" },
+            { value: 300, question: "Who sang 'Thriller'?" },
+            { value: 400, question: "What’s the name of Harry Potter’s owl?" },
+            { value: 500, question: "Who directed 'Inception'?" },
+          ],
+        },
+      ];
+
+      const board = document.getElementById("board");
+      const modal = document.getElementById("question-modal");
+      const questionText = document.getElementById("question-text");
+      const closeBtn = document.getElementById("close-btn");
+
+      // Build board
+      data.forEach((cat) => {
+        const header = document.createElement("div");
+        header.className = "category";
+        header.textContent = cat.category;
+        board.appendChild(header);
+      });
+
+      // 5 questions per category
+      for (let i = 0; i < 5; i++) {
+        data.forEach((cat) => {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.textContent = `$${cat.questions[i].value}`;
+          cell.onclick = () => {
+            if (cell.classList.contains("used")) return;
+            cell.classList.add("used");
+            questionText.textContent = cat.questions[i].question;
+            modal.style.display = "flex";
+          };
+          board.appendChild(cell);
+        });
+      }
+
+      closeBtn.onclick = () => {
+        modal.style.display = "none";
+      };
+    </script>
+  </body>
+</html>
