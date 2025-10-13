@@ -188,13 +188,45 @@ let currentCell = null;
 // --- Render Board ---
 function renderBoard() {
   board.innerHTML = "";
-  gameData.forEach((cat) => {
+
+  gameData.forEach((cat, catIndex) => {
     const header = document.createElement("div");
     header.className = "category";
-    header.textContent = cat.category;
+
+    if (editMode) {
+      // Create an editable text field for category names
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = cat.category;
+      input.className = "category-input";
+
+      // Save category name on change or blur
+      input.addEventListener("change", () => {
+        const newName = input.value.trim();
+        if (newName) {
+          gameData[catIndex].category = newName;
+          localStorage.setItem("jeopardyData", JSON.stringify(gameData));
+        }
+      });
+
+      input.addEventListener("blur", () => {
+        const newName = input.value.trim();
+        if (newName) {
+          gameData[catIndex].category = newName;
+          localStorage.setItem("jeopardyData", JSON.stringify(gameData));
+        }
+      });
+
+      header.appendChild(input);
+    } else {
+      // Static display in play mode
+      header.textContent = cat.category;
+    }
+
     board.appendChild(header);
   });
 
+  // Render question cells
   for (let i = 0; i < 5; i++) {
     gameData.forEach((cat, catIndex) => {
       const cell = document.createElement("div");
