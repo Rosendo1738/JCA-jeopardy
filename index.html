@@ -3,11 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jeopardy Game Editor</title>
+    <title>Japanese Jeopardy</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Jeopardy!</h1>
+    <h1>Japanese Jeopardy 🇯🇵</h1>
+
+    <!-- Scoreboard -->
+    <div id="scoreboard">
+      <div class="team" id="team1">
+        <h2>Team 1</h2>
+        <p class="score" id="score1">0</p>
+      </div>
+      <div class="team" id="team2">
+        <h2>Team 2</h2>
+        <p class="score" id="score2">0</p>
+      </div>
+    </div>
 
     <div id="top-bar">
       <button id="mode-toggle">Switch to Edit Mode ✏️</button>
@@ -23,6 +35,12 @@
         id="question-editor"
         placeholder="Edit your question..."
       ></textarea>
+      <div id="modal-buttons">
+        <button id="award1">+ Team 1</button>
+        <button id="award2">+ Team 2</button>
+        <button id="subtract1">− Team 1</button>
+        <button id="subtract2">− Team 2</button>
+      </div>
       <div>
         <button id="save-btn">Save</button>
         <button id="close-btn">Close</button>

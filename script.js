@@ -1,4 +1,4 @@
-// --- Default game data ---
+// --- Default Japanese Jeopardy Data ---
 const defaultData = [
   {
     category: "Characters（文字）",
@@ -68,11 +68,12 @@ const defaultData = [
   },
 ];
 
-// --- Load data from localStorage or defaults ---
+// --- Game State ---
 let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
+let teamScores = { 1: 0, 2: 0 };
 
-// --- DOM elements ---
+// --- DOM References ---
 const board = document.getElementById("board");
 const modal = document.getElementById("modal");
 const questionText = document.getElementById("question-text");
@@ -82,11 +83,17 @@ const saveBtn = document.getElementById("save-btn");
 const closeBtn = document.getElementById("close-btn");
 const modeToggle = document.getElementById("mode-toggle");
 const resetBtn = document.getElementById("reset-btn");
+const score1 = document.getElementById("score1");
+const score2 = document.getElementById("score2");
+const award1 = document.getElementById("award1");
+const award2 = document.getElementById("award2");
+const subtract1 = document.getElementById("subtract1");
+const subtract2 = document.getElementById("subtract2");
 
 let currentCategory = null;
 let currentIndex = null;
 
-// --- Render Board ---
+// --- Board Rendering ---
 function renderBoard() {
   board.innerHTML = "";
   gameData.forEach((cat) => {
@@ -101,20 +108,20 @@ function renderBoard() {
       const cell = document.createElement("div");
       cell.className = "cell";
       cell.textContent = `$${cat.questions[i].value}`;
-      cell.onclick = () => openModal(catIndex, i);
+      cell.onclick = () => openModal(catIndex, i, cell);
       board.appendChild(cell);
     });
   }
 }
 
 // --- Modal Handling ---
-function openModal(catIndex, qIndex) {
+function openModal(catIndex, qIndex, cell) {
   currentCategory = catIndex;
   currentIndex = qIndex;
-
+  modal.dataset.cellValue = cell.textContent; // store value for scoring
   const questionObj = gameData[catIndex].questions[qIndex];
   modal.style.display = "flex";
-  modalTitle.textContent = `${gameData[catIndex].category} - $${questionObj.value}`;
+  modalTitle.textContent = `${gameData[catIndex].category} - ${questionObj.value} pts`;
 
   if (editMode) {
     questionEditor.style.display = "block";
@@ -142,7 +149,35 @@ function closeModal() {
   modal.style.display = "none";
 }
 
-// --- Mode toggle ---
+// --- Scoring ---
+function updateScore(team, delta) {
+  teamScores[team] += delta;
+  document.getElementById(`score${team}`).textContent = teamScores[team];
+}
+
+// Buttons for awarding/subtracting
+award1.onclick = () => {
+  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  updateScore(1, value);
+  closeModal();
+};
+award2.onclick = () => {
+  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  updateScore(2, value);
+  closeModal();
+};
+subtract1.onclick = () => {
+  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  updateScore(1, -value);
+  closeModal();
+};
+subtract2.onclick = () => {
+  const value = parseInt(modalTitle.textContent.match(/\d+/));
+  updateScore(2, -value);
+  closeModal();
+};
+
+// --- Mode Toggle ---
 modeToggle.onclick = () => {
   editMode = !editMode;
   modeToggle.textContent = editMode
@@ -156,12 +191,13 @@ resetBtn.onclick = () => {
     localStorage.removeItem("jeopardyData");
     gameData = JSON.parse(JSON.stringify(defaultData));
     renderBoard();
+    teamScores = { 1: 0, 2: 0 };
+    score1.textContent = 0;
+    score2.textContent = 0;
   }
 };
 
-// --- Buttons ---
+// --- Init ---
 closeBtn.onclick = closeModal;
 saveBtn.onclick = saveQuestion;
-
-// --- Init ---
 renderBoard();
