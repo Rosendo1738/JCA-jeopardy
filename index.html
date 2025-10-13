@@ -95,8 +95,28 @@
       <div class="settings-content">
         <h2>Settings ⚙️</h2>
 
-        <label for="reveal-speed">Reveal Speed (seconds):</label><br />
-        <input type="number" id="reveal-speed" min="1" max="10" step="0.5" />
+        <label for="reveal-speed">Auto-Reveal Delay (seconds, 0 = off):</label
+        ><br />
+        <input
+          type="number"
+          id="reveal-speed"
+          min="0"
+          max="10"
+          step="0.5"
+          value="0"
+        />
+
+        <br /><br />
+
+        <label for="timer-length">Timer Length (seconds):</label><br />
+        <input
+          type="number"
+          id="timer-length"
+          min="5"
+          max="120"
+          step="5"
+          value="30"
+        />
 
         <div class="settings-buttons">
           <button id="save-settings">Save</button>
@@ -112,65 +132,57 @@
 
         <div id="help-body">
           <p>
-            <strong>Default Reveal Speed:</strong> 3 seconds (can be changed in
+            <strong>Default Timer:</strong> 30 seconds (adjustable in
             <em>Settings ⚙️</em>)
           </p>
 
           <h3>🎮 Play Mode</h3>
           <ul>
             <li>
-              Click a question to reveal it — after your set delay, the answer
-              appears automatically.
+              Click a question to open it — the countdown timer starts
+              automatically.
             </li>
             <li>
-              Use <b>Reveal Answer 👀</b> to manually flip between question and
-              answer.
+              Use <b>Reveal Answer 👀</b> to show or hide the answer manually.
             </li>
-            <li>
-              Click <b>+ Team</b> or <b>− Team</b> to award or subtract points.
-            </li>
-            <li>
-              Used questions are grayed out (but resettable with “Reset Board”).
-            </li>
+            <li>Click <b>+ Team</b> or <b>− Team</b> to adjust points.</li>
+            <li>Used questions are grayed out until you reset the board.</li>
           </ul>
 
           <h3>✏️ Edit Mode</h3>
           <ul>
             <li>
-              Click “Switch to Edit Mode ✏️” to modify any question or answer.
+              Click “Switch to Edit Mode ✏️” to modify any question, answer, or
+              category title.
             </li>
-            <li>Edits are saved automatically in your browser.</li>
-            <li>Editing a question resets its “used” state.</li>
+            <li>Changes are saved automatically in your browser.</li>
+            <li>Editing a question resets its used state.</li>
           </ul>
 
           <h3>💾 Save & Export</h3>
           <ul>
             <li>
-              <b>Save / Export 💾</b> — Downloads your custom questions and
+              <b>Save / Export 💾</b> — downloads all your custom questions and
               answers as a <code>.json</code> file.
             </li>
             <li>
-              <b>Import 📂</b> — Uploads a previously exported file to restore
+              <b>Import 📂</b> — upload that file on another computer to restore
               your game setup.
-            </li>
-            <li>
-              Files are portable between devices (works on GitHub Pages and
-              browsers).
             </li>
           </ul>
 
           <h3>⚙️ Settings</h3>
           <ul>
-            <li>
-              Change the reveal speed (1–10 seconds) — saved automatically.
-            </li>
+            <li>Change auto-reveal delay (set to 0 for manual reveal).</li>
+            <li>Adjust question timer duration (default 30 seconds).</li>
+            <li>Settings are saved automatically.</li>
           </ul>
 
           <h3>➕ Manual Score Buttons</h3>
           <ul>
             <li>
-              Use the <b>+</b> and <b>−</b> beside each team’s score to adjust
-              manually (+100 / −100).
+              Use the <b>+</b> and <b>−</b> beside each team’s score to manually
+              change totals (+100 / −100).
             </li>
           </ul>
         </div>
