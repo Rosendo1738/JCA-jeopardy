@@ -145,8 +145,8 @@ const defaultData = [
     ],
   },
 ];
+// --- Game Data (default) ---
 
-// --- Game State ---
 let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
@@ -164,6 +164,9 @@ const saveBtn = document.getElementById("save-btn");
 const closeBtn = document.getElementById("close-btn");
 const modeToggle = document.getElementById("mode-toggle");
 const resetBtn = document.getElementById("reset-btn");
+const exportBtn = document.getElementById("export-btn");
+const importBtn = document.getElementById("import-btn");
+const importFile = document.getElementById("import-file");
 const score1 = document.getElementById("score1");
 const score2 = document.getElementById("score2");
 const award1 = document.getElementById("award1");
@@ -227,7 +230,6 @@ function openModal(catIndex, qIndex, cell) {
     questionEditor.style.display = "none";
     answerEditor.style.display = "none";
     saveBtn.style.display = "none";
-
     autoFlipTimer = setTimeout(() => flipInner.classList.add("flipped"), 3000);
   }
 }
@@ -235,38 +237,26 @@ function openModal(catIndex, qIndex, cell) {
 function saveQuestion() {
   const newQ = questionEditor.value.trim();
   const newA = answerEditor.value.trim();
-
-  if (newQ) {
-    gameData[currentCategory].questions[currentIndex].question = newQ;
-  }
+  if (newQ) gameData[currentCategory].questions[currentIndex].question = newQ;
   gameData[currentCategory].questions[currentIndex].answer =
     newA || "No answer provided.";
 
-  // 💾 Save edits persistently
   localStorage.setItem("jeopardyData", JSON.stringify(gameData));
 
-  // ♻️ Reset the used state for this card (so it can be replayed)
-  if (currentCell) {
-    currentCell.classList.remove("used");
-  }
-
+  // Reset "used" status when edited
+  if (currentCell) currentCell.classList.remove("used");
   closeModal();
 }
 
 function closeModal() {
   modal.style.display = "none";
   clearTimeout(autoFlipTimer);
-
-  // ❌ Don’t mark used if we’re in edit mode
-  if (!editMode && currentCell) {
-    currentCell.classList.add("used");
-  }
+  if (!editMode && currentCell) currentCell.classList.add("used");
 }
 
-// --- Reveal ---
+// --- Reveal / Scoring ---
 revealBtn.onclick = () => flipInner.classList.toggle("flipped");
 
-// --- Scoring ---
 function updateScore(team, delta) {
   teamScores[team] += delta;
   const el = document.getElementById(`score${team}`);
@@ -298,29 +288,59 @@ modeToggle.onclick = () => {
   modeToggle.textContent = editMode
     ? "Switch to Play Mode 🎮"
     : "Switch to Edit Mode ✏️";
+  renderBoard();
 };
 
-// --- Reset ---
+// --- Reset (scores only) ---
 resetBtn.onclick = () => {
   if (
-    confirm(
-      "Reset scores and clear used questions? (Your edits will stay saved)"
-    )
+    confirm("Reset scores and clear used questions? (Your edits stay saved)")
   ) {
-    // keep custom gameData intact
     teamScores = { 1: 0, 2: 0 };
     score1.textContent = 0;
     score2.textContent = 0;
-
-    // remove "used" visual tags
-    document.querySelectorAll(".cell.used").forEach((cell) => {
-      cell.classList.remove("used");
-    });
-
-    // close modal if open
+    document
+      .querySelectorAll(".cell.used")
+      .forEach((cell) => cell.classList.remove("used"));
     modal.style.display = "none";
   }
 };
+
+// --- Export JSON ---
+exportBtn.onclick = () => {
+  const blob = new Blob([JSON.stringify(gameData, null, 2)], {
+    type: "application/json",
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "jeopardy_data.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
+// --- Import JSON ---
+importBtn.onclick = () => importFile.click();
+
+importFile.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if (!Array.isArray(imported)) throw new Error("Invalid format");
+      gameData = imported;
+      localStorage.setItem("jeopardyData", JSON.stringify(gameData));
+      renderBoard();
+      alert("✅ Questions imported successfully!");
+    } catch {
+      alert("⚠️ Invalid JSON file format.");
+    }
+  };
+  reader.readAsText(file);
+});
 
 // --- Init ---
 closeBtn.onclick = closeModal;
