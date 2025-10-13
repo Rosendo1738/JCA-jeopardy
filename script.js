@@ -402,8 +402,6 @@ const helpCard = document.getElementById("help-card");
 const helpBtn = document.getElementById("help-btn");
 const helpBox = document.querySelector(".help-box");
 const closeHelp = document.getElementById("close-help");
-const toggleInstructions = document.getElementById("toggle-instructions");
-const helpBody = document.getElementById("help-body");
 
 helpBtn.addEventListener("click", () => {
   helpCard.style.display = "flex";
@@ -413,16 +411,6 @@ helpBtn.addEventListener("click", () => {
 closeHelp.addEventListener("click", () => {
   helpBox.classList.remove("show");
   setTimeout(() => (helpCard.style.display = "none"), 200);
-});
-
-toggleInstructions.addEventListener("click", () => {
-  if (helpBody.style.display === "none") {
-    helpBody.style.display = "block";
-    toggleInstructions.textContent = "Hide Instructions 👁️";
-  } else {
-    helpBody.style.display = "none";
-    toggleInstructions.textContent = "Show Instructions 📖";
-  }
 });
 
 // --- Init ---

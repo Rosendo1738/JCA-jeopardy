@@ -104,13 +104,12 @@
       </div>
     </div>
 
-    <!-- Help Modal -->
     <!-- Help Popup Card -->
     <div id="help-card">
       <div class="help-box">
         <h2>Help & Instructions 🆘</h2>
 
-        <div id="help-body" style="display: none">
+        <div id="help-body">
           <p>
             <strong>Default Reveal Speed:</strong> 3 seconds (can be changed in
             <em>Settings ⚙️</em>)
@@ -129,44 +128,53 @@
             <li>
               Click <b>+ Team</b> or <b>− Team</b> to award or subtract points.
             </li>
-            <li>Used questions are grayed out (resettable).</li>
+            <li>
+              Used questions are grayed out (but resettable with “Reset Board”).
+            </li>
           </ul>
 
           <h3>✏️ Edit Mode</h3>
           <ul>
-            <li>Switch to “Edit Mode ✏️” to modify questions and answers.</li>
-            <li>Changes auto-save to your browser.</li>
-            <li>Editing resets that question’s used status.</li>
+            <li>
+              Click “Switch to Edit Mode ✏️” to modify any question or answer.
+            </li>
+            <li>Edits are saved automatically in your browser.</li>
+            <li>Editing a question resets its “used” state.</li>
           </ul>
 
           <h3>💾 Save & Export</h3>
           <ul>
             <li>
-              <b>Save / Export 💾</b> — Downloads your questions as
-              <code>jeopardy_data.json</code>.
+              <b>Save / Export 💾</b> — Downloads your custom questions and
+              answers as a <code>.json</code> file.
             </li>
             <li>
-              <b>Import 📂</b> — Upload that file on another computer to restore
-              your game.
+              <b>Import 📂</b> — Uploads a previously exported file to restore
+              your game setup.
+            </li>
+            <li>
+              Files are portable between devices (works on GitHub Pages and
+              browsers).
             </li>
           </ul>
 
           <h3>⚙️ Settings</h3>
           <ul>
-            <li>Change reveal speed (1–10 s) — saved automatically.</li>
+            <li>
+              Change the reveal speed (1–10 seconds) — saved automatically.
+            </li>
           </ul>
 
           <h3>➕ Manual Score Buttons</h3>
           <ul>
             <li>
-              Use the small <b>+</b> / <b>−</b> beside each team’s score to
-              adjust manually (+100/−100).
+              Use the <b>+</b> and <b>−</b> beside each team’s score to adjust
+              manually (+100 / −100).
             </li>
           </ul>
         </div>
 
         <div class="help-actions">
-          <button id="toggle-instructions">Show Instructions 📖</button>
           <button id="close-help">Close ❌</button>
         </div>
       </div>
