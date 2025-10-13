@@ -1,4 +1,4 @@
-// --- Japanese Jeopardy Data (with answers) ---
+// --- Default Jeopardy Data ---
 const defaultData = [
   {
     category: "Characters（文字）",
@@ -145,8 +145,8 @@ const defaultData = [
     ],
   },
 ];
-// --- Game Data (default) ---
 
+// --- Game State ---
 let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
@@ -204,7 +204,6 @@ function renderBoard() {
 // --- Modal Handling ---
 function openModal(catIndex, qIndex, cell) {
   clearTimeout(autoFlipTimer);
-
   currentCategory = catIndex;
   currentIndex = qIndex;
   currentCell = cell;
@@ -240,10 +239,9 @@ function saveQuestion() {
   if (newQ) gameData[currentCategory].questions[currentIndex].question = newQ;
   gameData[currentCategory].questions[currentIndex].answer =
     newA || "No answer provided.";
-
   localStorage.setItem("jeopardyData", JSON.stringify(gameData));
 
-  // Reset "used" status when edited
+  // Reset used status after edit
   if (currentCell) currentCell.classList.remove("used");
   closeModal();
 }
@@ -251,6 +249,7 @@ function saveQuestion() {
 function closeModal() {
   modal.style.display = "none";
   clearTimeout(autoFlipTimer);
+  // Don’t mark used if in edit mode
   if (!editMode && currentCell) currentCell.classList.add("used");
 }
 
@@ -288,7 +287,7 @@ modeToggle.onclick = () => {
   modeToggle.textContent = editMode
     ? "Switch to Play Mode 🎮"
     : "Switch to Edit Mode ✏️";
-  renderBoard();
+  renderBoard(); // refresh click handlers
 };
 
 // --- Reset (scores only) ---
@@ -306,21 +305,27 @@ resetBtn.onclick = () => {
   }
 };
 
-// --- Export JSON ---
-exportBtn.onclick = () => {
-  const blob = new Blob([JSON.stringify(gameData, null, 2)], {
-    type: "application/json",
-  });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "jeopardy_data.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-};
+// --- EXPORT QUESTIONS / ANSWERS ---
+exportBtn.addEventListener("click", () => {
+  try {
+    const blob = new Blob([JSON.stringify(gameData, null, 2)], {
+      type: "application/json",
+    });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "jeopardy_data.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    alert("✅ File exported successfully!");
+  } catch (err) {
+    alert("⚠️ Export failed: " + err.message);
+  }
+});
 
-// --- Import JSON ---
-importBtn.onclick = () => importFile.click();
+// --- IMPORT QUESTIONS / ANSWERS ---
+importBtn.addEventListener("click", () => importFile.click());
 
 importFile.addEventListener("change", (e) => {
   const file = e.target.files[0];
@@ -330,13 +335,13 @@ importFile.addEventListener("change", (e) => {
   reader.onload = (evt) => {
     try {
       const imported = JSON.parse(evt.target.result);
-      if (!Array.isArray(imported)) throw new Error("Invalid format");
+      if (!Array.isArray(imported)) throw new Error("Invalid JSON format");
       gameData = imported;
       localStorage.setItem("jeopardyData", JSON.stringify(gameData));
       renderBoard();
       alert("✅ Questions imported successfully!");
-    } catch {
-      alert("⚠️ Invalid JSON file format.");
+    } catch (err) {
+      alert("⚠️ Failed to import: " + err.message);
     }
   };
   reader.readAsText(file);
