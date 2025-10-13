@@ -151,10 +151,10 @@ let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
 let autoFlipTimer = null;
-
+let timeLeft = 30; // default seconds
 // --- Settings ---
 let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
-  revealDelay: 10,
+  revealDelay: 30,
 };
 
 // --- DOM References ---
@@ -253,6 +253,8 @@ function openModal(catIndex, qIndex, cell) {
   questionText.textContent = qObj.question;
   answerText.textContent = qObj.answer || "No answer provided.";
   flipInner.classList.remove("flipped");
+  // --- Start Timer when modal opens ---
+  startTimer();
 
   if (editMode) {
     flipInner.style.display = "none";
@@ -444,6 +446,35 @@ closeHelp.addEventListener("click", () => {
   helpBox.classList.remove("show");
   setTimeout(() => (helpCard.style.display = "none"), 200);
 });
+
+// --- Timer Logic ---
+function startTimer() {
+  clearInterval(countdownTimer);
+  const timerDisplay = document.getElementById("timer-display");
+
+  timeLeft = 30; // reset to default or configurable later
+  timerDisplay.textContent = timeLeft;
+  timerDisplay.classList.remove("warning");
+
+  countdownTimer = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+
+    if (timeLeft <= 5) {
+      timerDisplay.classList.add("warning");
+    }
+
+    if (timeLeft <= 0) {
+      clearInterval(countdownTimer);
+      timerDisplay.textContent = "⏰ TIME!";
+      timerDisplay.classList.add("warning");
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(countdownTimer);
+}
 
 // --- Init ---
 closeBtn.onclick = closeModal;
