@@ -289,9 +289,9 @@ function saveQuestion() {
 }
 
 function closeModal() {
+  stopTimer(); // stop countdown when closing
   modal.style.display = "none";
   clearTimeout(autoFlipTimer);
-  // Don’t mark used if in edit mode
   if (!editMode && currentCell) currentCell.classList.add("used");
 }
 
@@ -421,13 +421,13 @@ closeSettingsBtn.addEventListener("click", () => {
 
 saveSettingsBtn.addEventListener("click", () => {
   const newSpeed = parseFloat(revealInput.value);
-  if (!isNaN(newSpeed) && newSpeed >= 1 && newSpeed <= 10) {
+  if (!isNaN(newSpeed) && newSpeed >= 1 && newSpeed <= 100) {
     settings.revealDelay = newSpeed;
     localStorage.setItem("jeopardySettings", JSON.stringify(settings));
     alert(`✅ Reveal speed set to ${newSpeed}s`);
     settingsModal.style.display = "none";
   } else {
-    alert("⚠️ Please enter a number between 1 and 10.");
+    alert("⚠️ Please enter a number between 1 and 100.");
   }
 });
 
