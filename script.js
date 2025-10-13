@@ -152,6 +152,11 @@ let editMode = false;
 let teamScores = { 1: 0, 2: 0 };
 let autoFlipTimer = null;
 
+// --- Settings ---
+let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
+  revealDelay: 3,
+};
+
 // --- DOM References ---
 const board = document.getElementById("board");
 const modal = document.getElementById("modal");
@@ -229,7 +234,10 @@ function openModal(catIndex, qIndex, cell) {
     questionEditor.style.display = "none";
     answerEditor.style.display = "none";
     saveBtn.style.display = "none";
-    autoFlipTimer = setTimeout(() => flipInner.classList.add("flipped"), 3000);
+    autoFlipTimer = setTimeout(
+      () => flipInner.classList.add("flipped"),
+      settings.revealDelay * 1000
+    );
   }
 }
 
@@ -360,6 +368,34 @@ document
 document
   .getElementById("minus2")
   .addEventListener("click", () => updateScore(2, -100));
+
+// --- Settings Modal Logic ---
+const settingsModal = document.getElementById("settings-modal");
+const settingsBtn = document.getElementById("settings-btn");
+const revealInput = document.getElementById("reveal-speed");
+const saveSettingsBtn = document.getElementById("save-settings");
+const closeSettingsBtn = document.getElementById("close-settings");
+
+settingsBtn.addEventListener("click", () => {
+  revealInput.value = settings.revealDelay;
+  settingsModal.style.display = "flex";
+});
+
+closeSettingsBtn.addEventListener("click", () => {
+  settingsModal.style.display = "none";
+});
+
+saveSettingsBtn.addEventListener("click", () => {
+  const newSpeed = parseFloat(revealInput.value);
+  if (!isNaN(newSpeed) && newSpeed >= 1 && newSpeed <= 10) {
+    settings.revealDelay = newSpeed;
+    localStorage.setItem("jeopardySettings", JSON.stringify(settings));
+    alert(`✅ Reveal speed set to ${newSpeed}s`);
+    settingsModal.style.display = "none";
+  } else {
+    alert("⚠️ Please enter a number between 1 and 10.");
+  }
+});
 
 // --- Init ---
 closeBtn.onclick = closeModal;
