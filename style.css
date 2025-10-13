@@ -344,3 +344,83 @@ textarea {
 #close-help:hover {
   background: #ffd633;
 }
+
+/* Help Popup Card */
+#help-card {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 400;
+}
+
+.help-box {
+  background: #001f4d;
+  color: white;
+  border: 2px solid #ffcc00;
+  border-radius: 12px;
+  width: 380px;
+  max-height: 80vh;
+  padding: 20px 25px;
+  text-align: left;
+  overflow-y: auto;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+.help-box.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.help-box h2 {
+  color: #ffcc00;
+  text-align: center;
+  margin-top: 0;
+}
+
+.help-box h3 {
+  color: #ffcc00;
+  margin-top: 12px;
+}
+
+.help-box ul {
+  margin: 8px 0 10px 20px;
+}
+
+.help-box li {
+  line-height: 1.4em;
+}
+
+.help-box code {
+  background: #002d6b;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #ffcc00;
+}
+
+.help-actions {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.help-actions button {
+  background: #ffcc00;
+  color: black;
+  border: none;
+  padding: 6px 12px;
+  margin: 5px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.help-actions button:hover {
+  background: #ffd633;
+}
