@@ -99,7 +99,7 @@ const defaultData = [
 // --- Game State ---
 let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
-let teamScores = { 1: 0, 2: 0 };
+let teamScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 let autoFlipTimer = null;
 let countdownTimer = null;
 let timeLeft = 30;
@@ -127,10 +127,19 @@ const importBtn = document.getElementById("import-btn");
 const importFile = document.getElementById("import-file");
 const score1 = document.getElementById("score1");
 const score2 = document.getElementById("score2");
+const score3 = document.getElementById("score3");
+const score4 = document.getElementById("score4");
+const score5 = document.getElementById("score5");
 const award1 = document.getElementById("award1");
 const award2 = document.getElementById("award2");
+const award3 = document.getElementById("award3");
+const award4 = document.getElementById("award4");
+const award5 = document.getElementById("award5");
 const subtract1 = document.getElementById("subtract1");
 const subtract2 = document.getElementById("subtract2");
+const subtract3 = document.getElementById("subtract3");
+const subtract4 = document.getElementById("subtract4");
+const subtract5 = document.getElementById("subtract5");
 const revealBtn = document.getElementById("reveal-btn");
 const flipInner = document.getElementById("flip-inner");
 
@@ -253,12 +262,37 @@ award2.onclick = () => {
   updateScore(2, Number(modal.dataset.value));
   closeModal();
 };
+award3.onclick = () => {
+  updateScore(3, Number(modal.dataset.value));
+  closeModal();
+};
+award4.onclick = () => {
+  updateScore(4, Number(modal.dataset.value));
+  closeModal();
+};
+award5.onclick = () => {
+  updateScore(5, Number(modal.dataset.value));
+  closeModal();
+};
+
 subtract1.onclick = () => {
   updateScore(1, -Number(modal.dataset.value));
   closeModal();
 };
 subtract2.onclick = () => {
   updateScore(2, -Number(modal.dataset.value));
+  closeModal();
+};
+subtract3.onclick = () => {
+  updateScore(3, -Number(modal.dataset.value));
+  closeModal();
+};
+subtract4.onclick = () => {
+  updateScore(4, -Number(modal.dataset.value));
+  closeModal();
+};
+subtract5.onclick = () => {
+  updateScore(5, -Number(modal.dataset.value));
   closeModal();
 };
 
@@ -277,6 +311,11 @@ resetBtn.onclick = () => {
     teamScores = { 1: 0, 2: 0 };
     score1.textContent = 0;
     score2.textContent = 0;
+    score1.textContent = 0;
+    score2.textContent = 0;
+    score3.textContent = 0;
+    score4.textContent = 0;
+    score5.textContent = 0;
     document
       .querySelectorAll(".cell.used")
       .forEach((c) => c.classList.remove("used"));
@@ -336,6 +375,26 @@ document
 document
   .getElementById("minus2")
   .addEventListener("click", () => updateScore(2, -100));
+document
+  .getElementById("plus3")
+  .addEventListener("click", () => updateScore(3, 100));
+document
+  .getElementById("minus3")
+  .addEventListener("click", () => updateScore(3, -100));
+
+document
+  .getElementById("plus4")
+  .addEventListener("click", () => updateScore(4, 100));
+document
+  .getElementById("minus4")
+  .addEventListener("click", () => updateScore(4, -100));
+
+document
+  .getElementById("plus5")
+  .addEventListener("click", () => updateScore(5, 100));
+document
+  .getElementById("minus5")
+  .addEventListener("click", () => updateScore(5, -100));
 
 // --- Settings Modal Logic ---
 const settingsModal = document.getElementById("settings-modal");
