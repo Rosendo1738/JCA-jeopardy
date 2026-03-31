@@ -99,18 +99,24 @@ const defaultData = [
 // --- Game State ---
 let gameData = JSON.parse(localStorage.getItem("jeopardyData")) || defaultData;
 let editMode = false;
-let teamScores = { 1: 0, 2: 0 };
+
+// --- Dynamic Teams ---
+let teamScores = JSON.parse(localStorage.getItem("teamScores")) || {
+  1: 0,
+  2: 0,
+};
+
+// --- Settings ---
+let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
+  revealDelay: 0,
+  timerLength: 30,
+};
+
 let autoFlipTimer = null;
 let countdownTimer = null;
 let timeLeft = 30;
 
-// --- Settings ---
-let settings = JSON.parse(localStorage.getItem("jeopardySettings")) || {
-  revealDelay: 0, // 0 = no auto reveal
-  timerLength: 30, // adjustable countdown
-};
-
-// --- DOM References ---
+// --- DOM ---
 const board = document.getElementById("board");
 const modal = document.getElementById("modal");
 const questionText = document.getElementById("question-text");
@@ -125,20 +131,66 @@ const resetBtn = document.getElementById("reset-btn");
 const exportBtn = document.getElementById("export-btn");
 const importBtn = document.getElementById("import-btn");
 const importFile = document.getElementById("import-file");
-const score1 = document.getElementById("score1");
-const score2 = document.getElementById("score2");
-const award1 = document.getElementById("award1");
-const award2 = document.getElementById("award2");
-const subtract1 = document.getElementById("subtract1");
-const subtract2 = document.getElementById("subtract2");
 const revealBtn = document.getElementById("reveal-btn");
 const flipInner = document.getElementById("flip-inner");
+const scoreboard = document.getElementById("scoreboard");
 
 let currentCategory = null;
 let currentIndex = null;
 let currentCell = null;
 
-// --- Render Board ---
+// --- SCOREBOARD ---
+function renderScoreboard() {
+  scoreboard.innerHTML = "";
+
+  Object.keys(teamScores).forEach((teamId) => {
+    const div = document.createElement("div");
+    div.className = "team";
+
+    div.innerHTML = `
+      <h2>Team ${teamId}</h2>
+      <div class="score-controls">
+        <button class="minus">−</button>
+        <p class="score" id="score${teamId}">${teamScores[teamId]}</p>
+        <button class="plus">+</button>
+      </div>
+      <button class="remove">Remove</button>
+    `;
+
+    div.querySelector(".plus").onclick = () => updateScore(teamId, 100);
+    div.querySelector(".minus").onclick = () => updateScore(teamId, -100);
+    div.querySelector(".remove").onclick = () => {
+      delete teamScores[teamId];
+      renderScoreboard();
+    };
+
+    scoreboard.appendChild(div);
+  });
+
+  localStorage.setItem("teamScores", JSON.stringify(teamScores));
+}
+
+document.getElementById("add-team-btn").onclick = () => {
+  const newId = Math.max(0, ...Object.keys(teamScores).map(Number)) + 1;
+  teamScores[newId] = 0;
+  renderScoreboard();
+};
+
+// --- SCORE UPDATE ---
+function updateScore(team, delta) {
+  teamScores[team] += delta;
+
+  const el = document.getElementById(`score${team}`);
+  if (el) {
+    el.textContent = teamScores[team];
+    el.style.transform = "scale(1.3)";
+    setTimeout(() => (el.style.transform = "scale(1)"), 200);
+  }
+
+  localStorage.setItem("teamScores", JSON.stringify(teamScores));
+}
+
+// --- BOARD ---
 function renderBoard() {
   board.innerHTML = "";
 
@@ -148,20 +200,11 @@ function renderBoard() {
 
     if (editMode) {
       const input = document.createElement("input");
-      input.type = "text";
       input.value = cat.category;
-      input.className = "category-input";
-
-      const saveCategory = () => {
-        const newName = input.value.trim();
-        if (newName) {
-          gameData[catIndex].category = newName;
-          localStorage.setItem("jeopardyData", JSON.stringify(gameData));
-        }
+      input.onchange = () => {
+        gameData[catIndex].category = input.value;
+        localStorage.setItem("jeopardyData", JSON.stringify(gameData));
       };
-
-      input.addEventListener("change", saveCategory);
-      input.addEventListener("blur", saveCategory);
       header.appendChild(input);
     } else {
       header.textContent = cat.category;
@@ -181,234 +224,46 @@ function renderBoard() {
   }
 }
 
-// --- Modal Handling ---
+// --- MODAL ---
 function openModal(catIndex, qIndex, cell) {
-  clearTimeout(autoFlipTimer);
   currentCategory = catIndex;
   currentIndex = qIndex;
   currentCell = cell;
 
-  const qObj = gameData[catIndex].questions[qIndex];
-  modal.dataset.value = qObj.value;
-  modal.style.display = "flex";
-  modalTitle.textContent = `${gameData[catIndex].category} - ${qObj.value} pts`;
+  const q = gameData[catIndex].questions[qIndex];
 
-  questionText.textContent = qObj.question;
-  answerText.textContent = qObj.answer || "No answer provided.";
+  modal.style.display = "flex";
+  modal.dataset.value = q.value;
+
+  modalTitle.textContent = `${gameData[catIndex].category} - ${q.value}`;
+  questionText.textContent = q.question;
+  answerText.textContent = q.answer || "No answer provided.";
+
   flipInner.classList.remove("flipped");
 
   startTimer();
-
-  if (editMode) {
-    flipInner.style.display = "none";
-    questionEditor.style.display = "block";
-    answerEditor.style.display = "block";
-    saveBtn.style.display = "inline-block";
-    questionEditor.value = qObj.question;
-    answerEditor.value = qObj.answer || "";
-  } else {
-    flipInner.style.display = "block";
-    questionEditor.style.display = "none";
-    answerEditor.style.display = "none";
-    saveBtn.style.display = "none";
-  }
-}
-
-function saveQuestion() {
-  const newQ = questionEditor.value.trim();
-  const newA = answerEditor.value.trim();
-  if (newQ) gameData[currentCategory].questions[currentIndex].question = newQ;
-  gameData[currentCategory].questions[currentIndex].answer =
-    newA || "No answer provided.";
-  localStorage.setItem("jeopardyData", JSON.stringify(gameData));
-
-  if (currentCell) currentCell.classList.remove("used");
-  closeModal();
 }
 
 function closeModal() {
   stopTimer();
-  document.getElementById("timer-display").textContent = "";
   modal.style.display = "none";
-  clearTimeout(autoFlipTimer);
-  if (!editMode && currentCell) currentCell.classList.add("used");
+  if (currentCell) currentCell.classList.add("used");
 }
 
-// --- Reveal / Scoring ---
-revealBtn.onclick = () => flipInner.classList.toggle("flipped");
-
-function updateScore(team, delta) {
-  teamScores[team] += delta;
-  const el = document.getElementById(`score${team}`);
-  el.textContent = teamScores[team];
-  el.style.transform = "scale(1.3)";
-  setTimeout(() => (el.style.transform = "scale(1)"), 200);
-}
-
-award1.onclick = () => {
-  updateScore(1, Number(modal.dataset.value));
-  closeModal();
-};
-award2.onclick = () => {
-  updateScore(2, Number(modal.dataset.value));
-  closeModal();
-};
-subtract1.onclick = () => {
-  updateScore(1, -Number(modal.dataset.value));
-  closeModal();
-};
-subtract2.onclick = () => {
-  updateScore(2, -Number(modal.dataset.value));
-  closeModal();
-};
-
-// --- Mode Toggle ---
-modeToggle.onclick = () => {
-  editMode = !editMode;
-  modeToggle.textContent = editMode
-    ? "Switch to Play Mode 🎮"
-    : "Switch to Edit Mode ✏️";
-  renderBoard();
-};
-
-// --- Reset Scores ---
-resetBtn.onclick = () => {
-  if (confirm("Reset scores and clear used questions? (Edits stay saved)")) {
-    teamScores = { 1: 0, 2: 0 };
-    score1.textContent = 0;
-    score2.textContent = 0;
-    document
-      .querySelectorAll(".cell.used")
-      .forEach((c) => c.classList.remove("used"));
-    modal.style.display = "none";
-  }
-};
-
-// --- Export / Import ---
-exportBtn.addEventListener("click", () => {
-  try {
-    const blob = new Blob([JSON.stringify(gameData, null, 2)], {
-      type: "application/json",
-    });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "jeopardy_data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
-    alert("✅ File exported successfully!");
-  } catch (err) {
-    alert("⚠️ Export failed: " + err.message);
-  }
-});
-
-importBtn.addEventListener("click", () => importFile.click());
-importFile.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    try {
-      const imported = JSON.parse(evt.target.result);
-      if (!Array.isArray(imported)) throw new Error("Invalid JSON format");
-      gameData = imported;
-      localStorage.setItem("jeopardyData", JSON.stringify(gameData));
-      renderBoard();
-      alert("✅ Questions imported successfully!");
-    } catch (err) {
-      alert("⚠️ Failed to import: " + err.message);
-    }
-  };
-  reader.readAsText(file);
-});
-
-// --- Manual Score Adjust Buttons ---
-document
-  .getElementById("plus1")
-  .addEventListener("click", () => updateScore(1, 100));
-document
-  .getElementById("minus1")
-  .addEventListener("click", () => updateScore(1, -100));
-document
-  .getElementById("plus2")
-  .addEventListener("click", () => updateScore(2, 100));
-document
-  .getElementById("minus2")
-  .addEventListener("click", () => updateScore(2, -100));
-
-// --- Settings Modal Logic ---
-const settingsModal = document.getElementById("settings-modal");
-const settingsBtn = document.getElementById("settings-btn");
-const revealInput = document.getElementById("reveal-speed");
-const timerInput = document.getElementById("timer-length");
-const saveSettingsBtn = document.getElementById("save-settings");
-const closeSettingsBtn = document.getElementById("close-settings");
-
-settingsBtn.addEventListener("click", () => {
-  revealInput.value = settings.revealDelay;
-  timerInput.value = settings.timerLength;
-  settingsModal.style.display = "flex";
-});
-
-closeSettingsBtn.addEventListener("click", () => {
-  settingsModal.style.display = "none";
-});
-
-saveSettingsBtn.addEventListener("click", () => {
-  const newReveal = parseFloat(revealInput.value);
-  const newTimer = parseInt(timerInput.value);
-
-  if (
-    !isNaN(newReveal) &&
-    newReveal >= 0 &&
-    newReveal <= 10 &&
-    !isNaN(newTimer) &&
-    newTimer >= 5 &&
-    newTimer <= 120
-  ) {
-    settings.revealDelay = newReveal;
-    settings.timerLength = newTimer;
-    localStorage.setItem("jeopardySettings", JSON.stringify(settings));
-    alert(`✅ Settings saved! Timer = ${newTimer}s`);
-    settingsModal.style.display = "none";
-  } else {
-    alert("⚠️ Enter valid values (Reveal 0–10s, Timer 5–120s).");
-  }
-});
-
-// --- Help Popup Logic ---
-const helpCard = document.getElementById("help-card");
-const helpBtn = document.getElementById("help-btn");
-const helpBox = document.querySelector(".help-box");
-const closeHelp = document.getElementById("close-help");
-
-helpBtn.addEventListener("click", () => {
-  helpCard.style.display = "flex";
-  setTimeout(() => helpBox.classList.add("show"), 50);
-});
-closeHelp.addEventListener("click", () => {
-  helpBox.classList.remove("show");
-  setTimeout(() => (helpCard.style.display = "none"), 200);
-});
-
-// --- Timer Logic ---
+// --- TIMER ---
 function startTimer() {
   clearInterval(countdownTimer);
-  const timerDisplay = document.getElementById("timer-display");
+  const display = document.getElementById("timer-display");
 
-  timeLeft = settings.timerLength || 30;
-  timerDisplay.textContent = timeLeft;
-  timerDisplay.classList.remove("warning");
+  timeLeft = settings.timerLength;
+  display.textContent = timeLeft;
 
   countdownTimer = setInterval(() => {
     timeLeft--;
-    if (timeLeft > 0) {
-      timerDisplay.textContent = timeLeft;
-      if (timeLeft <= 5) timerDisplay.classList.add("warning");
-    } else {
-      timerDisplay.textContent = "⏰ TIME!";
-      timerDisplay.classList.add("warning");
+    display.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      display.textContent = "⏰ TIME!";
       stopTimer();
     }
   }, 1000);
@@ -416,10 +271,44 @@ function startTimer() {
 
 function stopTimer() {
   clearInterval(countdownTimer);
-  countdownTimer = null;
 }
 
-// --- Init ---
+// --- CONTROLS ---
+modeToggle.onclick = () => {
+  editMode = !editMode;
+  renderBoard();
+};
+
+resetBtn.onclick = () => {
+  teamScores = {};
+  renderScoreboard();
+};
+
 closeBtn.onclick = closeModal;
-saveBtn.onclick = saveQuestion;
+revealBtn.onclick = () => flipInner.classList.toggle("flipped");
+
+// --- EXPORT / IMPORT ---
+exportBtn.onclick = () => {
+  const blob = new Blob([JSON.stringify(gameData, null, 2)], {
+    type: "application/json",
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "jeopardy_data.json";
+  a.click();
+};
+
+importBtn.onclick = () => importFile.click();
+importFile.onchange = (e) => {
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    gameData = JSON.parse(evt.target.result);
+    localStorage.setItem("jeopardyData", JSON.stringify(gameData));
+    renderBoard();
+  };
+  reader.readAsText(e.target.files[0]);
+};
+
+// --- INIT ---
+renderScoreboard();
 renderBoard();
